@@ -5,8 +5,8 @@ pipelines:
     label_template: '${COUNT}'
     lock_behavior: none
     materials:
-      git-repo:
-        git: https://github.com/theArcianCoder/cfn-log-test.git
+      git-repo: 
+        url: https://github.com/theArcianCoder/cfn-log-test.git 
         branch: master
     stages:
       - deploy:
