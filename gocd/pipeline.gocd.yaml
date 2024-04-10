@@ -7,7 +7,7 @@ pipelines:
     materials:
       git-repo: 
         url: https://github.com/theArcianCoder/cfn-log-test.git 
-        branch: master
+        branch: main
     stages:
       - deploy:
           jobs:
