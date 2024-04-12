@@ -1,4 +1,4 @@
 {
-    "key_name": "test.pem",
-    "image_id": "ami-080e1f13689e07408"
+    "KeyName": "test.pem",
+    "ImageId": "ami-080e1f13689e07408"
   }
