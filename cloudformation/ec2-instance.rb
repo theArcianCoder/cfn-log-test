@@ -1,4 +1,5 @@
 require 'cfndsl'
+require 'yaml'
 
 puts YAML.dump(
   CloudFormation do
