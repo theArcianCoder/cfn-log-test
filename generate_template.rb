@@ -9,6 +9,9 @@ def generate_template
   yaml_template = template.to_yaml
   raise "Error: Generated template is empty." if yaml_template.strip.empty?
 
+  puts "Generated YAML Template:"
+  puts yaml_template  # Print YAML template to console
+
   yaml_template
 end
 
