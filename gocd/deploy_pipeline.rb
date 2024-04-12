@@ -4,7 +4,7 @@ require 'open3'
 def deploy_ec2_stack
   command = <<-CMD
     aws cloudformation deploy \
-      --template-file ec2-instance.yaml \
+      --template-file cloudformation/ec2-instance.rb \
       --stack-name my-ec2-stack \
       --parameter-overrides "$(jq -r '.[] | "\(.key)=\(.value)"' cloudformation/parameters.json)" \
       --region us-east-1
