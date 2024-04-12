@@ -1,5 +1,7 @@
-ec2_instance(name: 'MyEC2Instance') do
-    image_id 'ami-12345678'  # Replace with your desired AMI ID
+ec2_instance('MyEC2Instance') do
+    # EC2 instance configuration
+    image_id 'ami-12345678'
     instance_type 't2.micro'
-    key_name 'my-keypair'     # Replace with your SSH key pair
+    key_name 'my-keypair'
   end
+  
