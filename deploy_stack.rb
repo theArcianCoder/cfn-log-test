@@ -14,7 +14,7 @@ end
 parameters = JSON.parse(File.read('cloudformation/parameters.json'))
 
 # Validate and deploy stack
-template_file = 'template.json'
+template_file = 'template.yaml'
 stack_name = 'my-stack'
 region = 'us-east-1'
 
