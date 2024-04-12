@@ -1,19 +1,23 @@
 format_version: '3'
 pipelines:
-  deploy_ec2_pipeline:
+  deploy_cfn_pipeline:
     group: infra
     label_template: '${COUNT}'
     lock_behavior: none
     materials:
-      git-repo: 
-        url: https://github.com/theArcianCoder/cfn-log-test.git 
-        branch: main
+      git-repo:
+        git: https://github.com/yourusername/my-repo.git
+        branch: master
     stages:
-      - deploy:
+      - generate_template:
           jobs:
-            - deploy_ec2:
+            - generate_template:
                 tasks:
                   - exec:
-                      command: aws cloudformation deploy --template-file cloudformation/ec2-instance.yaml --stack-name my-ec2-stack --parameter-overrides $(cat cloudformation/parameters.json | jq -r to_entries[] | map("\(.key)=\(.value|tostring)") | join(" ")) --region us-east-1
+                      command: ruby generate_template.rb
+      - deploy_stack:
+          jobs:
+            - deploy_stack:
+                tasks:
                   - exec:
-                      command: aws cloudformation describe-stack-events --stack-name my-ec2-stack --region us-east-1
+                      command: ruby deploy_stack.rb
