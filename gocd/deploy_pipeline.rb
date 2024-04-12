@@ -32,5 +32,5 @@ def run_pipeline_commands
     return exit_code
 end
   
-
-exit(run_pipeline_commands)
+# Run pipeline commands and exit with combined exit code
+exit(run_pipeline_commands.exitstatus)
