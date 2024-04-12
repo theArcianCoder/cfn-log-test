@@ -24,11 +24,13 @@ def print_stack_events
   return status
 end
 
+# Method to execute all pipeline commands
 def run_pipeline_commands
-  exit_code = deploy_ec2_stack
-  exit_code |= describe_stack_events
-  exit_code |= print_stack_events
-  return exit_code
+    exit_code = deploy_ec2_stack
+    exit_code ||= describe_stack_events
+    exit_code ||= print_stack_events
+    return exit_code
 end
+  
 
 exit(run_pipeline_commands)
