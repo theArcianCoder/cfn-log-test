@@ -23,7 +23,7 @@ def describe_stack_events(stack_name, region)
   # Print the stack events to the console
   puts "Stack Events for #{stack_name}:"
   response.stack_events.each do |event|
-    puts "#{event.event_id}: #{event.resource_type} - #{event.resource_status} - #{event.timestamp}"
+    puts "#{event.event_id}: #{event.resource_type} - #{event.resource_status} - #{event.timestamp} - Reason: #{event.resource_status_reason}"
   end
 rescue Aws::CloudFormation::Errors::ServiceError => e
   puts "Error describing stack events: #{e.message}"
