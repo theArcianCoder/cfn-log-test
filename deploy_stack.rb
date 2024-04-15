@@ -1,5 +1,4 @@
 require 'aws-sdk-cloudformation'
-require 'json'
 
 def deploy_ec2_stack(template_file, stack_name, region)
   client = Aws::CloudFormation::Client.new(region: region)
@@ -20,16 +19,17 @@ def describe_stack_events(stack_name, region)
   next_token = nil
 
   loop do
-    response = client.describe_stack_events({
-      stack_name: stack_name,
-      next_token: next_token
-    })
+    params = { stack_name: stack_name }
+    params[:next_token] = next_token if next_token
 
-    # Print the stack events to the console
+    response = client.describe_stack_events(params)
+
+    # Print all stack events to the console
     response.stack_events.each do |event|
-      puts JSON.pretty_generate(event.to_h)
+      puts "#{event.event_id}: #{event.resource_type} - #{event.resource_status} - #{event.timestamp}"
     end
 
+    # Retrieve next set of events if available
     next_token = response.next_token
     break unless next_token
   end
@@ -49,7 +49,7 @@ end
 
 # Set your template file path, stack name, and region
 template_file = 'cloudformation/ec2-instance.yaml'
-stack_name = 'my-ec2-stack-3'
+stack_name = 'my-ec2-stack-4'
 region = 'us-east-1'
 
 # Run the pipeline commands
