@@ -3,5 +3,5 @@ Resources:
     Type: AWS::EC2::Instance
     Properties:
       InstanceType: t2.micro
-      ImageId: ami-12345678 # specify your desired AMI ID
-      KeyName: my-keypair # specify your SSH key pair
+      ImageId: ami-080e1f13689e07408 # specify your desired AMI ID
+      KeyName: test.pem # specify your SSH key pair
