@@ -41,7 +41,7 @@ end
 
 # Set your template file path, stack name, and region
 template_file = 'cloudformation/ec2-instance.yaml'
-stack_name = 'my-ec2-stack-1ß'
+stack_name = 'my-ec2-stack-1'
 region = 'us-east-1'
 
 # Run the pipeline
