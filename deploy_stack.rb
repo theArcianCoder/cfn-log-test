@@ -1,6 +1,7 @@
 require 'aws-sdk-cloudformation'
+require 'json'
 
-def deploy_stack(template_file, stack_name, region)
+def deploy_ec2_stack(template_file, stack_name, region)
   client = Aws::CloudFormation::Client.new(region: region)
   response = client.create_stack({
     stack_name: stack_name,
@@ -8,10 +9,10 @@ def deploy_stack(template_file, stack_name, region)
   })
 
   # Return the stack ID for reference
-  response.stack_id
+  return response.stack_id
 rescue Aws::CloudFormation::Errors::ServiceError => e
   puts "Error deploying stack: #{e.message}"
-  nil
+  return nil
 end
 
 def describe_stack_events(stack_name, region)
@@ -23,15 +24,15 @@ def describe_stack_events(stack_name, region)
   # Print the stack events to the console
   puts "Stack Events for #{stack_name}:"
   response.stack_events.each do |event|
-    puts "#{event.event_id}: #{event.logical_resource_id} - #{event.resource_status} - #{event.timestamp}"
+    puts JSON.pretty_generate(event.to_h)
   end
 rescue Aws::CloudFormation::Errors::ServiceError => e
   puts "Error describing stack events: #{e.message}"
 end
 
-def run_pipeline(template_file, stack_name, region)
+def run_pipeline_commands(template_file, stack_name, region)
   # Deploy the CloudFormation stack
-  stack_id = deploy_stack(template_file, stack_name, region)
+  stack_id = deploy_ec2_stack(template_file, stack_name, region)
 
   # Describe stack events if the deployment was successful
   if stack_id
@@ -41,8 +42,8 @@ end
 
 # Set your template file path, stack name, and region
 template_file = 'cloudformation/ec2-instance.yaml'
-stack_name = 'my-ec2-stack-1'
+stack_name = 'my-ec2-stack-2'
 region = 'us-east-1'
 
-# Run the pipeline
-run_pipeline(template_file, stack_name, region)
+# Run the pipeline commands
+run_pipeline_commands(template_file, stack_name, region)
