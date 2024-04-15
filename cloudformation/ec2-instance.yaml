@@ -1,0 +1,7 @@
+Resources:
+  EC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t2.micro
+      ImageId: ami-12345678 # specify your desired AMI ID
+      KeyName: my-keypair # specify your SSH key pair

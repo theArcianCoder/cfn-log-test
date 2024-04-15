@@ -9,12 +9,6 @@ pipelines:
         git: https://github.com/yourusername/my-repo.git
         branch: master
     stages:
-      - generate_template:
-          jobs:
-            - generate_template:
-                tasks:
-                  - exec:
-                      command: ruby generate_template.rb
       - deploy_stack:
           jobs:
             - deploy_stack:

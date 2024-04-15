@@ -1,25 +1,34 @@
-require 'json'
+require 'open3'
 
-def validate_template(template_file)
-  # Validate CloudFormation template syntax
-  system("aws cloudformation validate-template --template-body file://#{template_file}")
+def deploy_ec2_stack
+  command = 'aws cloudformation deploy --template-file cloudformation/ec2-instance.yaml --stack-name my-ec2-stack --parameter-overrides $(cat cloudformation/parameters.json | jq -r to_entries[] | map("\(.key)=\(.value|tostring)") | join(" ")) --region us-east-1'
+  stdout, stderr, status = Open3.capture3(command)
+  puts stdout
+  puts stderr if status != 0
+  return status
 end
 
-def deploy_stack(stack_name, template_file, region)
-  # Deploy CloudFormation stack
-  system("aws cloudformation deploy --template-file #{template_file} --stack-name #{stack_name} --region #{region}")
+def describe_stack_events
+  command = 'aws cloudformation describe-stack-events --stack-name my-ec2-stack --region us-east-1 > stack-events.json'
+  stdout, stderr, status = Open3.capture3(command)
+  puts stdout
+  puts stderr if status != 0
+  return status
 end
 
-# Read template parameters from parameters.json
-parameters = JSON.parse(File.read('cloudformation/parameters.json'))
-
-# Validate and deploy stack
-template_file = 'template.yaml'
-stack_name = 'my-stack'
-region = 'us-east-1'
-
-if validate_template(template_file)
-  deploy_stack(stack_name, template_file, region)
-else
-  puts "Error: CloudFormation template validation failed."
+def print_stack_events
+  command = 'cat stack-events.json'
+  stdout, stderr, status = Open3.capture3(command)
+  puts stdout
+  puts stderr if status != 0
+  return status
 end
+
+def run_pipeline_commands
+  exit_code = deploy_ec2_stack
+  exit_code |= describe_stack_events
+  exit_code |= print_stack_events
+  return exit_code
+end
+
+exit(run_pipeline_commands)
