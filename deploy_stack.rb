@@ -17,14 +17,21 @@ end
 
 def describe_stack_events(stack_name, region)
   client = Aws::CloudFormation::Client.new(region: region)
-  response = client.describe_stack_events({
-    stack_name: stack_name
-  })
+  next_token = nil
 
-  # Print the stack events to the console
-  puts "Stack Events for #{stack_name}:"
-  response.stack_events.each do |event|
-    puts JSON.pretty_generate(event.to_h)
+  loop do
+    response = client.describe_stack_events({
+      stack_name: stack_name,
+      next_token: next_token
+    })
+
+    # Print the stack events to the console
+    response.stack_events.each do |event|
+      puts JSON.pretty_generate(event.to_h)
+    end
+
+    next_token = response.next_token
+    break unless next_token
   end
 rescue Aws::CloudFormation::Errors::ServiceError => e
   puts "Error describing stack events: #{e.message}"
@@ -42,7 +49,7 @@ end
 
 # Set your template file path, stack name, and region
 template_file = 'cloudformation/ec2-instance.yaml'
-stack_name = 'my-ec2-stack-2'
+stack_name = 'my-ec2-stack'
 region = 'us-east-1'
 
 # Run the pipeline commands
