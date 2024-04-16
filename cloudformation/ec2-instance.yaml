@@ -4,4 +4,4 @@ Resources:
     Properties:
       InstanceType: t2.micro
       ImageId: ami-080e1f13689e07408 # specify your desired AMI ID
-      KeyName: test.pem # specify your SSH key pair
+      KeyName: xyz.pem # specify your SSH key pair
